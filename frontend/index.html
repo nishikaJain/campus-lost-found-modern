@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost & Found - JKLU Campus</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <i class="fas fa-university"></i>
+            </div>
+            <div class="logo-text">
+                <h2>Lost & Found</h2>
+                <p>JKLU Campus</p>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="#home" class="nav-item active" onclick="showPage('home')">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#lost-items" class="nav-item" onclick="showPage('lost-items')">
+                <i class="fas fa-search"></i>
+                <span>Lost Items</span>
+            </a>
+            <a href="#found-items" class="nav-item" onclick="showPage('found-items')">
+                <i class="fas fa-box"></i>
+                <span>Found Items</span>
+            </a>
+            <a href="#report-lost" class="nav-item" onclick="showPage('report-lost')">
+                <i class="fas fa-plus"></i>
+                <span>Report Lost</span>
+            </a>
+            <a href="#report-found" class="nav-item" onclick="showPage('report-found')">
+                <i class="fas fa-box-open"></i>
+                <span>Report Found</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">Lost Something?<br>We're Here to Help</h1>
+                    <p class="hero-subtitle">Connect with your campus community to reunite lost items with their owners. Every item has a story—let's help them find their way home.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-white" onclick="showPage('report-lost')">
+                            <i class="fas fa-search"></i>
+                            Report Lost Item
+                        </button>
+                        <button class="btn btn-outline" onclick="showPage('report-found')">
+                            <i class="fas fa-box"></i>
+                            Report Found Item
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Cards -->
+            <section class="stats-section">
+                <div class="stat-card stat-orange">
+                    <div class="stat-content">
+                        <h3>Active Lost Items</h3>
+                        <div class="stat-number" id="active-lost-count">0</div>
+                        <p><i class="fas fa-clock"></i> Waiting to be found</p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-green">
+                    <div class="stat-content">
+                        <h3>Items Found</h3>
+                        <div class="stat-number" id="items-found-count">0</div>
+                        <p><i class="fas fa-check-circle"></i> Ready to claim</p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-purple">
+                    <div class="stat-content">
+                        <h3>Success Rate</h3>
+                        <div class="stat-number" id="success-rate">0%</div>
+                        <p><i class="fas fa-chart-line"></i> Items reunited</p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recently Lost Section -->
+            <section class="items-section">
+                <div class="section-header">
+                    <div>
+                        <h2>Recently Lost</h2>
+                        <p>Help find these items</p>
+                    </div>
+                    <button class="btn-link" onclick="showPage('lost-items')">
+                        View All <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div id="recent-lost-items" class="items-grid"></div>
+            </section>
+
+            <!-- Recently Found Section -->
+            <section class="items-section">
+                <div class="section-header">
+                    <div>
+                        <h2>Recently Found</h2>
+                        <p>Check if your item is here</p>
+                    </div>
+                    <button class="btn-link" onclick="showPage('found-items')">
+                        View All <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div id="recent-found-items" class="items-grid"></div>
+            </section>
+        </div>
+
+        <!-- Lost Items Page -->
+        <div id="lost-items-page" class="page">
+            <div class="page-header">
+                <h1>Lost Items</h1>
+                <p>Browse reported lost items and help reunite them with their owners</p>
+            </div>
+
+            <div class="search-section">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="lost-search" placeholder="Search by title, description, or location..." oninput="searchLostItems()">
+                </div>
+                <div class="filter-dropdown">
+                    <i class="fas fa-filter"></i>
+                    <select id="lost-category-filter" onchange="filterLostItems()">
+                        <option value="">All Categories</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Bags">Bags</option>
+                        <option value="Books">Books</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Personal Items">Personal Items</option>
+                        <option value="Documents">Documents</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="items-count" id="lost-items-count">Showing 0 lost items</div>
+            <div id="lost-items-container" class="items-grid"></div>
+        </div>
+
+        <!-- Found Items Page -->
+        <div id="found-items-page" class="page">
+            <div class="page-header">
+                <h1>Found Items</h1>
+                <p>Check if your lost item has been found by someone</p>
+            </div>
+
+            <div class="search-section">
+                <div class="search-bar">
+                    <i class="fas fa-box"></i>
+                    <input type="text" id="found-search" placeholder="Search by title, description, or location..." oninput="searchFoundItems()">
+                </div>
+                <div class="filter-dropdown">
+                    <i class="fas fa-filter"></i>
+                    <select id="found-category-filter" onchange="filterFoundItems()">
+                        <option value="">All Categories</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Bags">Bags</option>
+                        <option value="Books">Books</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Personal Items">Personal Items</option>
+                        <option value="Documents">Documents</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="items-count" id="found-items-count">Showing 0 found items</div>
+            <div id="found-items-container" class="items-grid"></div>
+        </div>
+
+        <!-- Report Lost Page -->
+        <div id="report-lost-page" class="page">
+            <div class="page-header">
+                <h1>Report Lost Item</h1>
+                <p>Help us help you find your lost item</p>
+            </div>
+
+            <div class="form-container">
+                <form id="report-lost-form" class="modern-form">
+                    <div class="form-group">
+                        <label for="lost-item-name">Item Name *</label>
+                        <input type="text" id="lost-item-name" name="item_name" required placeholder="e.g., Blue Backpack">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lost-category">Category *</label>
+                        <select id="lost-category" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Bags">Bags</option>
+                            <option value="Books">Books</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Personal Items">Personal Items</option>
+                            <option value="Documents">Documents</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lost-description">Description</label>
+                        <textarea id="lost-description" name="description" rows="4" placeholder="Provide details about the item"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lost-location">Location *</label>
+                        <input type="text" id="lost-location" name="location" required placeholder="Where did you lose it?">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lost-contact-name">Your Name *</label>
+                        <input type="text" id="lost-contact-name" name="contact_name" required placeholder="Full Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lost-contact-email">Email</label>
+                        <input type="email" id="lost-contact-email" name="contact_email" placeholder="your.email@university.edu">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lost-contact-phone">Phone (10 digits) *</label>
+                        <input type="tel" id="lost-contact-phone" name="contact_phone" 
+                               pattern="[0-9]{10}" maxlength="10" minlength="10" required
+                               placeholder="9876543210"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        <small>Enter exactly 10 digits</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Report
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Report Found Page -->
+        <div id="report-found-page" class="page">
+            <div class="page-header">
+                <h1>Report Found Item</h1>
+                <p>Help reunite someone with their lost item</p>
+            </div>
+
+            <div class="form-container">
+                <form id="report-found-form" class="modern-form">
+                    <div class="form-group">
+                        <label for="found-item-name">Item Name *</label>
+                        <input type="text" id="found-item-name" name="item_name" required placeholder="e.g., Black Water Bottle">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="found-category">Category *</label>
+                        <select id="found-category" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Bags">Bags</option>
+                            <option value="Books">Books</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Personal Items">Personal Items</option>
+                            <option value="Documents">Documents</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="found-description">Description</label>
+                        <textarea id="found-description" name="description" rows="4" placeholder="Provide details about the item"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="found-location">Location *</label>
+                        <input type="text" id="found-location" name="location" required placeholder="Where did you find it?">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="found-contact-name">Your Name *</label>
+                        <input type="text" id="found-contact-name" name="contact_name" required placeholder="Full Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="found-contact-email">Email</label>
+                        <input type="email" id="found-contact-email" name="contact_email" placeholder="your.email@university.edu">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="found-contact-phone">Phone (10 digits) *</label>
+                        <input type="tel" id="found-contact-phone" name="contact_phone" 
+                               pattern="[0-9]{10}" maxlength="10" minlength="10" required
+                               placeholder="9876543210"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        <small>Enter exactly 10 digits</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Report
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeContactModal()">&times;</span>
+            <h2 id="modal-title">Contact Information</h2>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
